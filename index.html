@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Eclissi di Seta — Cantine Aurelia Vesta</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@300;400;500&display=swap');
+
+  :root{
+    --night:#0E1430;
+    --night-2:#0A0F25;
+    --night-deep:#070A1A;
+    --garnet:#A04347;
+    --garnet-bright:#B7565A;
+    --garnet-dim:#5A1F22;
+    --gold:#C9A552;
+    --ivory:#EDE6DC;
+    --ivory-dim:#9893A0;
+    --line:rgba(176,86,90,.18);
+    --serif:'Cormorant Garamond', Georgia, serif;
+    --sans:'Inter', system-ui, sans-serif;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0; background:var(--night); color:var(--ivory);
+    font-family:var(--sans); -webkit-font-smoothing:antialiased;
+    overflow-x:hidden; font-weight:300;
+  }
+  img{ display:block; max-width:100%; }
+  section{ position:relative; z-index:1; padding:0 28px; }
+
+  /* OPENING THEATRE — hero elements start hidden, reveal in sequence */
+  .reveal{ opacity:0; transform:translateY(14px); transition:opacity 1.6s ease, transform 1.6s ease; }
+  .reveal.in{ opacity:1; transform:translateY(0); }
+  .reveal.d1{ transition-delay:.2s; }
+  .reveal.d2{ transition-delay:.6s; }
+  .reveal.d3{ transition-delay:1.0s; }
+  .reveal.d4{ transition-delay:3.6s; }
+  .reveal.d5{ transition-delay:4.0s; }
+  .reveal.d6{ transition-delay:4.4s; }
+
+  /* eclipse arc — dramatic slow emergence */
+  .arc-img{ opacity:0; transform:translateY(24px) scale(.86); transition:opacity 2.6s ease, transform 2.6s ease; transition-delay:1.5s; }
+  .arc-img.in{ opacity:.95; transform:translateY(0) scale(1); }
+
+  /* title letters reveal one by one */
+  .title .rl{
+    display:inline-block; opacity:0; transform:translateY(10px);
+    transition:opacity .9s ease, transform .9s ease;
+  }
+  .title.in .rl{ opacity:1; transform:translateY(0); }
+  .title .rl:nth-child(1){ transition-delay:2.6s; }
+  .title .rl:nth-child(2){ transition-delay:2.7s; }
+  .title .rl:nth-child(3){ transition-delay:2.8s; }
+  .title .rl:nth-child(4){ transition-delay:2.9s; }
+  .title .rl:nth-child(5){ transition-delay:3.0s; }
+  .title .rl:nth-child(6){ transition-delay:3.1s; }
+  .title .rl:nth-child(7){ transition-delay:3.2s; }
+
+  /* PARALLAX wrapper for full-bleed photos */
+  .parallax-frame{ overflow:hidden; position:relative; width:100%; }
+  .parallax-frame.ar-4-3{ aspect-ratio:4/3; }
+  .parallax-frame.ar-16-9{ aspect-ratio:16/9; }
+  .parallax-frame .px-img{
+    position:absolute; left:0; right:0; top:-14%; height:128%; width:100%;
+    object-fit:cover; will-change:transform;
+  }
+
+  /* scroll-reveal for sections below the fold */
+  .sr{ opacity:0; transform:translateY(24px); transition:opacity 1s ease, transform 1s ease; }
+  .sr.in{ opacity:1; transform:translateY(0); }
+
+  /* age gate */
+  .gate{
+    position:fixed; inset:0; z-index:200; background:var(--night-deep);
+    display:flex; align-items:center; justify-content:center; flex-direction:column;
+    text-align:center; padding:32px; transition:opacity .6s ease;
+  }
+  .gate.hidden{ opacity:0; pointer-events:none; }
+  .gate p{ font-family:var(--serif); font-size:19px; max-width:340px; line-height:1.5; color:var(--ivory); margin:0 0 26px; }
+  .gate-btns{ display:flex; gap:14px; flex-wrap:wrap; justify-content:center; }
+  .gate button{
+    font-family:var(--sans); font-size:11px; letter-spacing:.12em; text-transform:uppercase;
+    padding:13px 26px; cursor:pointer; border:1px solid var(--garnet-bright);
+  }
+  .gate-yes{ background:var(--garnet); color:var(--ivory); }
+  .gate-no{ background:transparent; color:var(--ivory-dim); border-color:rgba(176,86,90,.25); }
+
+  /* top language switch */
+  .langs{
+    position:absolute; top:18px; left:18px; z-index:30;
+    display:flex; gap:0; font-family:var(--sans);
+  }
+  .lang{
+    font-size:10px; letter-spacing:.14em; padding:7px 12px;
+    background:transparent; border:1px solid rgba(237,230,220,.25);
+    color:var(--ivory); cursor:pointer; transition:.2s;
+  }
+  .lang + .lang{ border-left:none; }
+  .lang[aria-pressed="true"]{ background:var(--ivory); color:var(--night); border-color:var(--ivory); }
+  .lang:focus-visible{ outline:1px solid var(--garnet-bright); outline-offset:2px; }
+
+  /* HERO */
+  .hero{
+    min-height:100vh; padding-top:70px; padding-bottom:48px;
+    display:flex; flex-direction:column; align-items:center; text-align:center;
+    position:relative;
+  }
+  .cammeo{
+    width:64px; height:64px; border-radius:50%; overflow:hidden;
+    margin-bottom:14px; box-shadow:0 0 0 1px rgba(201,165,82,.4), 0 8px 24px rgba(0,0,0,.4);
+  }
+  .cammeo img{ width:100%; height:100%; object-fit:cover; }
+  .cantine{
+    font-family:var(--serif); font-weight:500; font-size:18px; letter-spacing:.42em;
+    margin:0; color:var(--ivory); padding-left:.42em;
+  }
+  .estate-sub{
+    font-family:var(--sans); font-size:9.5px; letter-spacing:.32em;
+    color:var(--ivory-dim); margin-top:5px;
+  }
+  .estate-sub b{ font-weight:500; color:var(--ivory); letter-spacing:.22em; }
+
+  .arc-img{ width:90px; margin:38px auto 14px; }
+  .arc-img img{ width:100%; height:auto; filter:drop-shadow(0 4px 24px rgba(183,86,90,.4)); animation:pulse 7s ease-in-out 4s infinite; }
+  @keyframes pulse{
+    0%,100%{ opacity:.85; transform:scale(1); }
+    50%{ opacity:1; transform:scale(1.04); }
+  }
+
+  .title{
+    font-family:var(--serif); font-weight:500; font-size:42px; line-height:1.0;
+    letter-spacing:.04em; text-transform:uppercase; color:var(--garnet-bright);
+    margin:0;
+  }
+  .title small{ display:block; font-size:.78em; letter-spacing:.1em; margin-top:6px; }
+  .vintage{
+    font-family:var(--serif); font-weight:400; font-size:22px; color:var(--ivory);
+    margin:20px 0 0; letter-spacing:.18em;
+  }
+  .tagline{
+    font-family:var(--serif); font-style:italic; font-size:17px;
+    color:var(--ivory); margin:38px auto 0; max-width:280px; line-height:1.5;
+  }
+
+  .scopri{
+    margin-top:60px; display:flex; flex-direction:column; align-items:center; gap:11px;
+  }
+  .scopri-label{
+    font-family:var(--sans); font-size:11px; letter-spacing:.32em; text-transform:uppercase;
+    color:var(--ivory);
+  }
+  .scopri-line{ width:1px; height:32px; background:var(--garnet-bright); animation:flow 2.5s ease-in-out infinite; }
+  @keyframes flow{ 0%{opacity:.2; transform:scaleY(.4)} 50%{opacity:1; transform:scaleY(1)} 100%{opacity:.2; transform:scaleY(.4)} }
+
+  /* sections */
+  .wrap{ max-width:560px; margin:0 auto; padding:90px 0 30px; }
+  .eyebrow-center{
+    font-family:var(--serif); font-weight:500; font-size:20px; letter-spacing:.32em;
+    text-transform:uppercase; color:var(--garnet-bright); text-align:center;
+    margin-bottom:18px;
+  }
+  .h2{
+    font-family:var(--serif); font-weight:500; font-size:30px;
+    line-height:1.16; margin:0 0 26px; color:var(--ivory); text-align:center;
+    max-width:13ch; margin-left:auto; margin-right:auto;
+  }
+  .body-text{ font-size:15px; line-height:1.85; color:var(--ivory); font-weight:300; }
+  .body-text + .body-text{ margin-top:18px; }
+  .body-text.center{ text-align:center; }
+
+  /* image full bleed */
+  .img-bleed{
+    width:100%; margin:36px 0 0; max-width:none;
+    aspect-ratio:4/3; object-fit:cover;
+  }
+  .img-bleed.tall{ aspect-ratio:3/4; }
+  .img-bleed.wide{ aspect-ratio:16/9; }
+
+  /* big vintage marker */
+  .vintage-block{
+    padding:70px 28px 30px; text-align:center; position:relative;
+  }
+  .vintage-arc{ width:60px; margin:0 auto 8px; opacity:.9; }
+  .vintage-arc img{ width:100%; }
+  .vintage-num{
+    font-family:var(--serif); font-weight:500; font-size:120px; line-height:.85;
+    color:var(--garnet-bright); letter-spacing:-.02em;
+    display:flex; flex-direction:column; align-items:center;
+  }
+  .vintage-num span:nth-child(2){ margin-top:-22px; }
+
+  /* sensorial cards */
+  .cards{ margin-top:18px; border-top:1px solid var(--line); }
+  .card{ border-bottom:1px solid var(--line); }
+  .card summary{
+    list-style:none; cursor:pointer; padding:20px 4px;
+    display:flex; align-items:center; justify-content:space-between; gap:16px;
+    font-family:var(--sans); font-size:15px; color:var(--ivory); font-weight:400;
+  }
+  .card summary::-webkit-details-marker{ display:none; }
+  .card summary:focus-visible{ outline:1px solid var(--garnet-bright); outline-offset:4px; }
+  .card-plus{ width:12px; height:12px; flex:none; position:relative; }
+  .card-plus::before, .card-plus::after{
+    content:""; position:absolute; background:var(--garnet-bright); transition:transform .25s ease;
+  }
+  .card-plus::before{ left:0; top:50%; width:100%; height:1px; transform:translateY(-50%); }
+  .card-plus::after{ top:0; left:50%; width:1px; height:100%; transform:translateX(-50%); }
+  details[open] .card-plus::after{ transform:translateX(-50%) scaleY(0); }
+  .card-body{ padding:0 4px 22px; font-size:14px; line-height:1.7; color:var(--ivory-dim); font-weight:300; max-width:46ch; }
+
+  .palate{
+    margin-top:34px; padding:22px;
+    background:rgba(183,86,90,.06); border-left:2px solid var(--garnet);
+  }
+  .palate-label{ font-family:var(--sans); font-size:10px; letter-spacing:.26em; text-transform:uppercase; color:var(--garnet-bright); margin-bottom:10px; display:block; }
+  .palate p{ font-family:var(--serif); font-size:16px; line-height:1.6; color:var(--ivory); margin:0; }
+
+  /* bottle layout */
+  .bottle-block{
+    padding:50px 28px 30px; text-align:center;
+  }
+  .bottle-img{
+    max-width:170px; margin:0 auto;
+    filter:drop-shadow(0 24px 48px rgba(0,0,0,.5));
+  }
+
+  /* edition + cta */
+  .edition{
+    text-align:center; padding:36px 28px 18px;
+    font-family:var(--sans); font-size:10.5px; letter-spacing:.16em; text-transform:uppercase;
+    color:var(--ivory-dim); border-top:1px solid var(--line); max-width:340px; margin:30px auto 0;
+    line-height:1.7;
+  }
+  .cta-wrap{ text-align:center; padding:14px 28px 60px; }
+  .cta{
+    display:inline-block; font-family:var(--sans); font-size:11.5px; letter-spacing:.18em;
+    text-transform:uppercase; color:var(--ivory); background:var(--garnet);
+    padding:18px 38px; text-decoration:none; transition:.2s; border:1px solid var(--garnet);
+  }
+  .cta:hover{ background:var(--garnet-bright); border-color:var(--garnet-bright); }
+
+  .credit{
+    text-align:center; padding:32px 28px 16px;
+    font-family:var(--sans); font-size:9px; letter-spacing:.32em; text-transform:uppercase;
+    color:rgba(152,147,160,.5);
+  }
+  .credit span{ margin:0 14px; }
+
+  /* full-bleed cellar image at the very end (atmospheric closer) */
+  .closer-frame{ height:55vh; min-height:300px; }
+
+  .demo-tag{
+    position:fixed; bottom:16px; right:16px; z-index:80;
+    font-family:var(--sans); font-size:9px; letter-spacing:.2em; text-transform:uppercase;
+    background:var(--garnet); color:var(--ivory); padding:6px 12px;
+  }
+
+  @media (prefers-reduced-motion:reduce){
+    .arc-img img{ animation:none; } .scopri-line{ animation:none; } html{scroll-behavior:auto}
+  }
+</style>
+</head>
+<body>
+
+  <div class="gate" id="gate">
+    <p data-i18n="gate_text">Questa esperienza è dedicata a chi ha già raggiunto la maggiore età. Confermi di avere più di 18 anni?</p>
+    <div class="gate-btns">
+      <button class="gate-yes" id="gate-yes" data-i18n="gate_yes">Sì, ho più di 18 anni</button>
+      <button class="gate-no" id="gate-no" data-i18n="gate_no">Esci</button>
+    </div>
+  </div>
+
+  <!-- HERO -->
+  <header class="hero">
+    <div class="langs" role="group" aria-label="Lingua / Language">
+      <button class="lang" data-lang="it" aria-pressed="true">IT</button>
+      <button class="lang" data-lang="en" aria-pressed="false">EN</button>
+    </div>
+
+    <div class="cammeo reveal d1"><img src="img/cammeo.png" alt="" /></div>
+    <h2 class="cantine reveal d2">CANTINE</h2>
+    <div class="estate-sub reveal d2"><b>AURELIA VESTA</b> &nbsp;·&nbsp; TOSCANA</div>
+
+    <div class="arc-img"><img src="img/arco.png" alt="" /></div>
+    <h1 class="title">
+      <span class="rl">E</span><span class="rl">C</span><span class="rl">L</span><span class="rl">I</span><span class="rl">S</span><span class="rl">S</span><span class="rl">I</span>
+      <small><span class="rl">d</span><span class="rl">i</span> <span class="rl">S</span><span class="rl">e</span><span class="rl">t</span><span class="rl">a</span></small>
+    </h1>
+    <div class="vintage reveal d4">2019</div>
+    <p class="tagline reveal d5" data-i18n="tagline">Un'annata che si rivela sorso dopo sorso.</p>
+
+    <div class="scopri reveal d6">
+      <span class="scopri-label" data-i18n="scopri">Scopri</span>
+      <span class="scopri-line"></span>
+    </div>
+  </header>
+
+  <!-- TERRITORIO -->
+  <section>
+    <div class="wrap sr">
+      <div class="eyebrow-center" data-i18n="eyebrow_1">Il territorio</div>
+      <h2 class="h2" data-i18n="h2_1">Dove la terra incontra il fuoco</h2>
+      <p class="body-text" data-i18n="text_1">Sulle colline più segrete della Toscana meridionale, dove il suolo vulcanico incontra le brezze del Mar Tirreno, nasce Eclissi di Seta. Qui il terreno regala ai grappoli una vena sapida e minerale, il respiro salmastro del mare, la pietra ancora calda di sole, che si fonde con la potenza del frutto toscano.</p>
+    </div>
+    <div class="parallax-frame ar-4-3"><img class="px-img" src="img/vigna.png" alt="" data-parallax="0.25" /></div>
+  </section>
+
+  <!-- IL VINO -->
+  <section>
+    <div class="wrap sr">
+      <div class="eyebrow-center" data-i18n="eyebrow_2">Il vino</div>
+      <h2 class="h2" data-i18n="h2_2">Un blend sartoriale</h2>
+      <p class="body-text" data-i18n="text_2a">65% Sangiovese Grosso, per la struttura e l'anima italiana. 25% Cabernet Franc, per l'eleganza scura e vellutata. 10% Ancellotta, un tocco segreto che dona colore profondo e morbidezza d'altri tempi.</p>
+      <p class="body-text" data-i18n="text_2b">Annata 2019, un'annata da manuale: inverno mite, primavera misurata, estate calda e ventilata. Le notti fresche di settembre hanno scolpito un equilibrio perfetto tra zucchero e acidità.</p>
+      <p class="body-text" data-i18n="text_2c">Vendemmia manuale e notturna, nella prima settimana di ottobre: i grappoli selezionati uno a uno al chiaro di luna, per preservare freschezza e profumi primari.</p>
+      <p class="body-text" data-i18n="text_2d">Affinamento: 20 mesi in barrique di rovere francese a tostatura leggera, seguiti da 14 mesi di riposo in bottiglia.</p>
+    </div>
+  </section>
+
+  <!-- VINTAGE BLOCK -->
+  <div class="vintage-block sr">
+    <div class="vintage-arc"><img src="img/arco.png" alt="" /></div>
+    <div class="vintage-num"><span>20</span><span>19</span></div>
+  </div>
+
+  <!-- SENSORIALE -->
+  <section>
+    <div class="wrap sr">
+      <div class="eyebrow-center" data-i18n="eyebrow_3">L'esperienza sensoriale</div>
+      <h2 class="h2" data-i18n="h2_3">Cosa custodisce il calice</h2>
+
+      <div class="cards">
+        <details class="card">
+          <summary><span data-i18n="card1_t">Frutti Neri e Spirito</span><span class="card-plus"></span></summary>
+          <div class="card-body" data-i18n="card1_b">Mora selvatica e amarena sotto spirito: l'apertura è un'esplosione scura e avvolgente.</div>
+        </details>
+        <details class="card">
+          <summary><span data-i18n="card2_t">Tabacco e Cacao</span><span class="card-plus"></span></summary>
+          <div class="card-body" data-i18n="card2_b">Tabacco da pipa bagnato e fave di cacao tostate: la sua anima più profonda.</div>
+        </details>
+        <details class="card">
+          <summary><span data-i18n="card3_t">Pepe, Viola e Grafite</span><span class="card-plus"></span></summary>
+          <div class="card-body" data-i18n="card3_b">Un finale ipnotico di pepe nero, violetta essiccata e grafite.</div>
+        </details>
+        <details class="card">
+          <summary><span data-i18n="card4_t">Sale e Pietra</span><span class="card-plus"></span></summary>
+          <div class="card-body" data-i18n="card4_b">Il ricordo del mare e della pietra vulcanica calda di sole — la firma del territorio.</div>
+        </details>
+      </div>
+
+      <div class="palate">
+        <span class="palate-label" data-i18n="palate_label">Al palato</span>
+        <p data-i18n="palate_text">Sorso monumentale ma di estrema finezza. Tannino levigato come velluto, acidità fresca, finale interminabile di liquirizia e legno di sandalo.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- BOTTLE -->
+  <div class="bottle-block sr">
+    <img class="bottle-img" src="img/bottiglia.png" alt="" />
+  </div>
+
+  <!-- A TAVOLA -->
+  <section>
+    <div class="wrap sr">
+      <div class="eyebrow-center" data-i18n="eyebrow_4">A tavola</div>
+      <h2 class="h2" data-i18n="h2_4">Un vino che si celebra</h2>
+      <p class="body-text" data-i18n="text_4">Eclissi di Seta richiede piatti di pari intensità: filetto di cervo in crosta di erbe con riduzione di mirtilli e cioccolato fondente, un grande brasato, una fiorentina frollata 60 giorni. Da meditazione, a fine serata, con un sigaro d'autore e Parmigiano Reggiano oltre i 40 mesi.</p>
+    </div>
+    <div class="parallax-frame ar-16-9"><img class="px-img" src="img/villa.png" alt="" data-parallax="0.2" /></div>
+  </section>
+
+  <!-- EDITION + CTA -->
+  <div class="edition" data-i18n="edition">Ogni bottiglia è numerata. Non è un vino che si compra: è un'edizione che si possiede.</div>
+  <div class="cta-wrap">
+    <a class="cta" href="#" data-i18n="cta">Scopri Cantine Aurelia Vesta</a>
+  </div>
+
+  <!-- CELLAR CLOSER (atmospheric, parallax) -->
+  <div class="parallax-frame closer-frame"><img class="px-img" src="img/botti.png" alt="" data-parallax="0.3" /></div>
+
+  <div class="credit">
+    <span>ECLISSI DI SETA</span><span>CANTINE AURELIA VESTA</span>
+  </div>
+
+  <div class="demo-tag">demo</div>
+
+<script>
+  const I18N = {
+    it:{
+      gate_text:"Questa esperienza è dedicata a chi ha già raggiunto la maggiore età. Confermi di avere più di 18 anni?",
+      gate_yes:"Sì, ho più di 18 anni", gate_no:"Esci",
+      tagline:"Un'annata che si rivela sorso dopo sorso.",
+      scopri:"Scopri",
+      eyebrow_1:"Il territorio",
+      h2_1:"Dove la terra incontra il fuoco",
+      text_1:"Sulle colline più segrete della Toscana meridionale, dove il suolo vulcanico incontra le brezze del Mar Tirreno, nasce Eclissi di Seta. Qui il terreno regala ai grappoli una vena sapida e minerale, il respiro salmastro del mare, la pietra ancora calda di sole, che si fonde con la potenza del frutto toscano.",
+      eyebrow_2:"Il vino",
+      h2_2:"Un blend sartoriale",
+      text_2a:"65% Sangiovese Grosso, per la struttura e l'anima italiana. 25% Cabernet Franc, per l'eleganza scura e vellutata. 10% Ancellotta, un tocco segreto che dona colore profondo e morbidezza d'altri tempi.",
+      text_2b:"Annata 2019, un'annata da manuale: inverno mite, primavera misurata, estate calda e ventilata. Le notti fresche di settembre hanno scolpito un equilibrio perfetto tra zucchero e acidità.",
+      text_2c:"Vendemmia manuale e notturna, nella prima settimana di ottobre: i grappoli selezionati uno a uno al chiaro di luna, per preservare freschezza e profumi primari.",
+      text_2d:"Affinamento: 20 mesi in barrique di rovere francese a tostatura leggera, seguiti da 14 mesi di riposo in bottiglia.",
+      eyebrow_3:"L'esperienza sensoriale",
+      h2_3:"Cosa custodisce il calice",
+      card1_t:"Frutti Neri e Spirito", card1_b:"Mora selvatica e amarena sotto spirito: l'apertura è un'esplosione scura e avvolgente.",
+      card2_t:"Tabacco e Cacao", card2_b:"Tabacco da pipa bagnato e fave di cacao tostate: la sua anima più profonda.",
+      card3_t:"Pepe, Viola e Grafite", card3_b:"Un finale ipnotico di pepe nero, violetta essiccata e grafite.",
+      card4_t:"Sale e Pietra", card4_b:"Il ricordo del mare e della pietra vulcanica calda di sole — la firma del territorio.",
+      palate_label:"Al palato",
+      palate_text:"Sorso monumentale ma di estrema finezza. Tannino levigato come velluto, acidità fresca, finale interminabile di liquirizia e legno di sandalo.",
+      eyebrow_4:"A tavola",
+      h2_4:"Un vino che si celebra",
+      text_4:"Eclissi di Seta richiede piatti di pari intensità: filetto di cervo in crosta di erbe con riduzione di mirtilli e cioccolato fondente, un grande brasato, una fiorentina frollata 60 giorni. Da meditazione, a fine serata, con un sigaro d'autore e Parmigiano Reggiano oltre i 40 mesi.",
+      edition:"Ogni bottiglia è numerata. Non è un vino che si compra: è un'edizione che si possiede.",
+      cta:"Scopri Cantine Aurelia Vesta"
+    },
+    en:{
+      gate_text:"This experience is intended for those who have already reached the legal drinking age. Do you confirm you are over 18?",
+      gate_yes:"Yes, I am over 18", gate_no:"Exit",
+      tagline:"A vintage that reveals itself sip by sip.",
+      scopri:"Discover",
+      eyebrow_1:"The territory",
+      h2_1:"Where the earth meets the fire",
+      text_1:"On the most secluded hills of southern Tuscany, where volcanic soil meets the breezes of the Tyrrhenian Sea, Eclissi di Seta is born. Here the land gives the grapes a saline, mineral edge — the salt breath of the sea, stone still warm from the sun — fused with the power of Tuscan fruit.",
+      eyebrow_2:"The wine",
+      h2_2:"A tailored blend",
+      text_2a:"65% Sangiovese Grosso, for structure and Italian soul. 25% Cabernet Franc, for dark, velvety elegance. 10% Ancellotta, a secret touch lending deep colour and old-world softness.",
+      text_2b:"Vintage 2019, a textbook year: a mild winter, a measured spring, a warm and breezy summer. The cool September nights carved a perfect balance between sugar and acidity.",
+      text_2c:"Hand-harvested at night, in the first week of October: each cluster selected by moonlight, to preserve freshness and primary aromas.",
+      text_2d:"Ageing: 20 months in lightly toasted French oak barriques, followed by 14 months resting in bottle.",
+      eyebrow_3:"The sensory experience",
+      h2_3:"What the glass holds",
+      card1_t:"Black Fruit and Spirit", card1_b:"Wild blackberry and black cherry in spirit: the opening is a dark, enveloping burst.",
+      card2_t:"Tobacco and Cocoa", card2_b:"Damp pipe tobacco and roasted cocoa beans: its deepest soul.",
+      card3_t:"Pepper, Violet and Graphite", card3_b:"A hypnotic finish of black pepper, dried violet and graphite.",
+      card4_t:"Salt and Stone", card4_b:"The memory of the sea and of sun-warmed volcanic stone — the signature of the land.",
+      palate_label:"On the palate",
+      palate_text:"A monumental sip of extreme finesse. Tannins polished like velvet, fresh acidity, an endless finish of liquorice and sandalwood.",
+      eyebrow_4:"At the table",
+      h2_4:"A wine to be celebrated",
+      text_4:"Eclissi di Seta calls for dishes of equal intensity: venison fillet in herb crust with blueberry and dark chocolate reduction, a slow-cooked braise, a 60-day aged Chianina steak. For quiet contemplation, late in the evening, with a fine cigar and Parmigiano Reggiano aged beyond 40 months.",
+      edition:"Each bottle is numbered. This is not a wine you buy: it is an edition you possess.",
+      cta:"Discover Cantine Aurelia Vesta"
+    }
+  };
+
+  function applyLang(code){
+    const d = I18N[code];
+    document.querySelectorAll('[data-i18n]').forEach(el=>{
+      const k = el.getAttribute('data-i18n');
+      if(d[k] !== undefined) el.textContent = d[k];
+    });
+    document.querySelectorAll('.lang').forEach(b=> b.setAttribute('aria-pressed', b.dataset.lang===code?'true':'false'));
+    document.documentElement.lang = code;
+  }
+  document.querySelectorAll('.lang').forEach(b=> b.addEventListener('click', ()=>applyLang(b.dataset.lang)) );
+  applyLang('it');
+
+  // ---- OPENING THEATRE ----
+  function playOpening(){
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if(reduced){
+      document.querySelectorAll('.reveal, .arc-img, .title').forEach(el=> el.classList.add('in'));
+      return;
+    }
+    // small delay so the gate fade-out completes
+    setTimeout(()=>{
+      document.querySelectorAll('.reveal').forEach(el=> el.classList.add('in'));
+      document.querySelector('.arc-img').classList.add('in');
+      document.querySelector('.title').classList.add('in');
+    }, 200);
+  }
+
+  const gate = document.getElementById('gate');
+  document.getElementById('gate-yes').addEventListener('click', ()=>{
+    gate.classList.add('hidden');
+    playOpening();
+    setTimeout(()=> gate.style.display='none', 650);
+  });
+  document.getElementById('gate-no').addEventListener('click', ()=>{
+    document.body.innerHTML = '<div style="min-height:100vh;display:flex;align-items:center;justify-content:center;background:#0E1430;color:#9893A0;font-family:Inter,sans-serif;font-size:13px;">—</div>';
+  });
+
+  // ---- SCROLL REVEAL ----
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting){
+        e.target.classList.add('in');
+        io.unobserve(e.target);
+      }
+    });
+  }, { threshold:0.15, rootMargin:'0px 0px -10% 0px' });
+  document.querySelectorAll('.sr').forEach(el=> io.observe(el));
+
+  // ---- PARALLAX ----
+  const parallaxImgs = document.querySelectorAll('.px-img');
+  let ticking = false;
+  function updateParallax(){
+    parallaxImgs.forEach(img=>{
+      const frame = img.parentElement;
+      const rect = frame.getBoundingClientRect();
+      const vh = window.innerHeight;
+      // only update when frame is in/near viewport
+      if(rect.bottom < -100 || rect.top > vh + 100) return;
+      const speed = parseFloat(img.dataset.parallax || '0.2');
+      // center of frame relative to center of viewport
+      const center = rect.top + rect.height/2;
+      const offset = (center - vh/2) * -speed;
+      img.style.transform = `translateY(${offset}px)`;
+    });
+    ticking = false;
+  }
+  if(!window.matchMedia('(prefers-reduced-motion: reduce)').matches){
+    window.addEventListener('scroll', ()=>{
+      if(!ticking){
+        requestAnimationFrame(updateParallax);
+        ticking = true;
+      }
+    }, { passive:true });
+    window.addEventListener('resize', updateParallax);
+    updateParallax();
+  }
+</script>
+</body>
+</html>
