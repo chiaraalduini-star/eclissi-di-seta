@@ -21,6 +21,13 @@ https://chiaraalduini-star.github.io/eclissi-di-seta/
 - Font corpo: Inter (leggero, peso 300)
 - Niente effetti vistosi: niente fumo, particelle, glitter, neon
 - Le animazioni devono raccontare qualcosa, non decorare
+- ECCEZIONE APPROVATA (2026-07-01, intensità rivista più volte lo stesso giorno): sfondo di
+  fumo rosso WebGL in #smoke-bg / smoke-bg.js. Livello approvato: marcato e ben visibile
+  (alpha ~0.75, fallback CSS opacità ~0.9) — non più "quasi impercettibile", su richiesta
+  esplicita e ripetuta dell'utente dopo test comparativi su più livelli di intensità.
+  Restano fermi: movimento lentissimo, nessuna interattività, nessun impatto su
+  layout/contenuti. Non usarla come precedente per altri effetti vistosi: resta
+  un'eccezione puntuale, non un cambio di linea generale.
 
 ## Motion design — linee guida
 - Velocità: lenta. Le transizioni non vanno mai sotto 0.8s, meglio 1.2-2s
