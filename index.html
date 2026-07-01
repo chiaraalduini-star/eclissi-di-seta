@@ -42,7 +42,7 @@
   .reveal.d6{ transition-delay:4.4s; }
 
   /* eclipse arc — dramatic slow emergence */
-  .arc-img{ opacity:0; transform:translateY(24px) scale(.86); transition:opacity 2.6s ease, transform 2.6s ease; transition-delay:1.5s; }
+  .arc-img{ opacity:0; transform:translateY(6px) scale(.92); transition:opacity 2.6s ease, transform 2.6s ease; transition-delay:1.5s; width:78px; margin:48px auto -18px; }
   .arc-img.in{ opacity:.95; transform:translateY(0) scale(1); }
 
   /* title letters reveal one by one */
@@ -104,7 +104,7 @@
 
   /* HERO */
   .hero{
-    min-height:100vh; padding-top:70px; padding-bottom:48px;
+    padding-top:70px; padding-bottom:56px;
     display:flex; flex-direction:column; align-items:center; text-align:center;
     position:relative;
   }
@@ -123,7 +123,6 @@
   }
   .estate-sub b{ font-weight:500; color:var(--ivory); letter-spacing:.22em; }
 
-  .arc-img{ width:90px; margin:50px auto 5px; }
   .arc-img img{ width:100%; height:auto; filter:drop-shadow(0 4px 24px rgba(183,86,90,.4)); animation:pulse 7s ease-in-out 4s infinite; }
   @keyframes pulse{
     0%,100%{ opacity:.85; transform:scale(1); }
@@ -156,7 +155,7 @@
   @keyframes flow{ 0%{opacity:.2; transform:scaleY(.4)} 50%{opacity:1; transform:scaleY(1)} 100%{opacity:.2; transform:scaleY(.4)} }
 
   /* sections */
-  .wrap{ max-width:560px; margin:0 auto; padding:45px 0 30px; }
+  .wrap{ max-width:560px; margin:0 auto; padding:90px 0 30px; }
   .eyebrow-center{
     font-family:var(--serif); font-weight:500; font-size:20px; letter-spacing:.32em;
     text-transform:uppercase; color:var(--garnet-bright); text-align:center;
@@ -251,12 +250,6 @@
 
   /* full-bleed cellar image at the very end (atmospheric closer) */
   .closer-frame{ height:55vh; min-height:300px; }
-
-  .demo-tag{
-    position:fixed; bottom:16px; right:16px; z-index:80;
-    font-family:var(--sans); font-size:9px; letter-spacing:.2em; text-transform:uppercase;
-    background:var(--garnet); color:var(--ivory); padding:6px 12px;
-  }
 
   @media (prefers-reduced-motion:reduce){
     .arc-img img{ animation:none; } .scopri-line{ animation:none; } html{scroll-behavior:auto}
@@ -385,8 +378,6 @@
   <div class="credit">
     <span>ECLISSI DI SETA</span><span>CANTINE AURELIA VESTA</span>
   </div>
-
-  <div class="demo-tag">demo</div>
 
 <script>
   const I18N = {
